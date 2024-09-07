@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Bienvenido</h1>
+        <div id="loginForm">
+            <div class="mb-3">
+                <input type="password" id="passwordInput" class="form-control" placeholder="Ingrese la contraseña">
+            </div>
+            <button id="submitPasswordBtn" class="btn btn-primary">Ingresar</button>
+        </div>
+        <div id="dashboardLink" style="display: none;">
+            <a href="/dashboard" class="btn btn-primary">Ir al Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('submitPasswordBtn').addEventListener('click', function() {
+            const password = document.getElementById('passwordInput').value;
+            
+            fetch('/check_password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('dashboardLink').style.display = 'block';
+                } else {
+                    alert('Contraseña incorrecta. Por favor, intente de nuevo.');
+                    document.getElementById('passwordInput').value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
